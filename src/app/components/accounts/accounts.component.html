@@ -1,0 +1,195 @@
+<!--navbar  --> 
+<div class="d-flex flex-column min-vh-100">
+  <!-- Top Navbar with Single Toggle Button -->
+  <nav class="navbar navbar-custom d-flex justify-content-between align-items-center px-3">
+    <div class="d-flex align-items-center gap-3">
+      <button aria-label="Toggle Main Menu" class="btn btn-link p-0 text-white" (click)="toggleMenu()">
+        <i class="fas fa-bars fa-lg"></i>
+      </button>
+      <span class="fw-semibold fs-5 mb-0">World Bank</span>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+
+      <button class="btn btn-danger d-flex align-items-center gap-2 px-3 py-1" (click)="logout()" style="font-weight:600;">
+        <i class="fas fa-sign-out-alt fa-lg"></i>
+        <span class="text-white small mb-0">Log Out</span>
+      </button>
+
+      <button aria-label="User Profile" routerLink="/profile-card" class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border-0 shadow-sm bg-white profile-btn" >
+        <i class="fas fa-user-circle text-primary fa-lg"></i>
+        <span class="text-dark fw-medium">{{userName}}</span>
+      </button>
+    </div>
+  </nav>
+<div class="d-flex flex-grow-1 overflow-hidden">
+
+<!--sidebar-->
+ <aside class="sidebar" *ngIf="menuVisible">
+  <div>
+    <div class="text-uppercase text-secondary small fw-semibold mb-3">Main Menu</div>
+    <nav class="nav flex-column mb-4">
+      <button class="nav-link text-secondary" (click) = "goToDashboard()"><i class="fas fa-home me-2"></i>Dashboard</button> 
+      <button class="nav-link active" routerLink="/accounts"><i class="far fa-credit-card me-2"></i>Accounts</button>
+      <button class="nav-link text-secondary" (click) = "goToTransactions()"><i class="fas fa-chart-bar me-2"></i>Transactions</button>
+      <button class="nav-link text-secondary" (click) = "goTotransfer()"><i class="fas fa-exchange-alt me-2"></i>Transfer</button>
+    </nav>
+    <div class="text-uppercase text-secondary small fw-semibold mb-3">Other Services</div>
+    <nav class="nav flex-column">
+      <a class="nav-link text-secondary" routerLink=""><i class="fas fa-piggy-bank me-2"></i>Savings</a>
+      <a class="nav-link text-secondary" routerLink=""><i class="fas fa-bell me-2"></i>Notifications</a>
+      <a class="nav-link text-secondary" routerLink=""><i class="fas fa-cog me-2"></i>Settings</a>
+      <a class="nav-link text-secondary" routerLink=""><i class="fas fa-question-circle me-2"></i>Help & Support</a>
+    </nav>
+  </div>
+  <div class="bg-light rounded p-3 mt-4 small text-secondary">
+    <div class="fw-semibold mb-1">Need Help?</div>
+    <div class="mb-3">Contact our support team 24/7</div>
+    <button class="btn btn-primary btn-sm w-100" (click)="contactSupport()">Contact Support</button>
+  </div>
+</aside>
+
+
+<main class="container-fluid p-4">
+  <section class="mb-4">
+    <h2 class="h6 fw-semibold mb-1">Your Accounts</h2>
+    <p class="text-secondary small mb-4">Manage and monitor all your accounts</p>
+
+    <!-- Accounts List -->
+    <div class="card shadow-sm mb-4 p-4">
+      <div class="d-flex justify-content-end mb-3">
+      </div>
+      <ul class="list-unstyled mb-0">
+        <li class="account-item d-flex align-items-center justify-content-between" *ngFor="let account of accounts">
+          <div class="d-flex align-items-center">
+            <span class="icon-circle"
+              [ngClass]="{
+                'bg-success': account.accountType.toLowerCase() === 'savings',
+                'bg-primary': account.accountType.toLowerCase() === 'current',
+                'bg-warning': account.accountType.toLowerCase() === 'business'
+              }">
+              <i [ngClass]="{
+                'fas fa-piggy-bank': account.accountType.toLowerCase() === 'savings',
+                'far fa-credit-card': account.accountType.toLowerCase() === 'current',
+                'fas fa-briefcase': account.accountType.toLowerCase() === 'business'
+              }"></i>
+            </span>
+            <div>
+              <div class="account-type">{{ account.accountType | titlecase }} Account</div>
+              <div class="account-number">A/c : {{ account.accountNumber || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="account-balance">
+            ₹ <span *ngIf="showBalance">{{ account.balance | number:'1.2-2' }}</span>
+            <span *ngIf="!showBalance">******</span>
+          </div>
+        </li>
+        <button class="btn btn-sm btn-outline-secondary" style="margin-left: 90%;" (click)="toggleBalance()">
+                  {{ showBalance ? 'Hide balance' : 'Show balance' }}
+        </button>
+      </ul>
+
+      <button style="margin-left: 25%; padding: 10px;" class="btn btn-outline-primary btn-sm mt-3 w-50" (click)="openAccountModal()">Open New Account</button>
+
+    </div>
+
+    <!-- Account Summary -->
+    <div class="card shadow-sm p-4">
+      <div class="border-bottom border-gray-light fw-semibold pb-2 mb-3">Account Summary</div>
+      <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
+        <div class="col">
+          <div class="bg-light rounded-md p-3">
+            <div class="text-xs text-gray-light mb-1">Total Balance</div>
+            <div class="font-bold text-sm text-gray-dark">{{ summary.totalBalance }}</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="bg-light rounded-md p-3">
+            <div class="text-xs text-gray-light mb-1">Monthly Income</div>
+            <div class="font-bold text-sm text-green">{{ summary.monthlyIncome }}</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="bg-light rounded-md p-3">
+            <div class="text-xs text-gray-light mb-1">Monthly Expenses</div>
+            <div class="font-bold text-sm text-red">{{ summary.monthlyExpenses }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between text-xs">
+        <a class="text-gray-light text-decoration-none hover:text-gray-900 d-flex align-items-center gap-1">
+          <i class="fas fa-download fa-xs"></i> Download Summary Report
+        </a>
+        <a class="text-gray-light text-decoration-none hover:text-gray-900 d-flex align-items-center gap-1">
+          View Transaction History <i class="fas fa-arrow-up-right-from-square fa-xs"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<!-- Modal Overlay -->
+<div class="modal-backdrop fade show" *ngIf="showAccountModal" style="z-index: 1050;"></div>
+
+<!-- Modal Dialog -->
+<div class="modal d-block" tabindex="-1" *ngIf="showAccountModal" style="background: rgba(0,0,0,0.2); z-index: 1060;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form (ngSubmit)="submitNewAccount()" #newAccountForm="ngForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Open New Account</h5>
+          <button type="button" class="btn-close" (click)="showAccountModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Account Type</label>
+            <select class="form-select" required [(ngModel)]="newAccount.accountType" name="accountType">
+              <option value="" disabled selected>Select type</option>
+              <option value="Savings">Savings</option>
+              <option value="Current">Current</option>
+              <option value="Business">Business</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Initial Deposit</label>
+            <input
+              type="number"
+              class="form-control"
+              required
+              [min]="newAccount.accountType === 'Business' ? 100000 : 1000"
+              max="1000000"
+              [(ngModel)]="newAccount.balance"
+              name="balance"
+              #balanceField="ngModel"
+            />
+            <span *ngIf="balanceField.errors?.['required'] && balanceField.touched" class="text-danger">
+              Initial deposit is required.
+            </span>
+            <span *ngIf="balanceField.errors?.['max'] && balanceField.touched" class="text-danger">
+              Maximum allowed is ₹10,00,000.
+            </span>
+            <span *ngIf="balanceField.errors?.['min'] && balanceField.touched" class="text-danger">
+              Minimum allowed is ₹{{ newAccount.accountType === 'Business' ? '1,00,000' : '1,000' }}.
+            </span>
+          </div>
+
+          <!-- Show info based on selected account type -->
+          <h4 class="text-muted small mt-2" *ngIf="newAccount.accountType === 'Savings'">
+            Savings account requires a minimum deposit of ₹1 and a maximum of ₹1,00,000.
+          </h4>
+          <h4 class="text-muted small mt-2" *ngIf="newAccount.accountType === 'Business'">
+            Business accounts require balance greater or equal to ₹1,00,000.
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="showAccountModal = false">Cancel</button>
+          <button type="submit"
+        class="btn btn-primary mt-3"
+        [disabled]="newAccountForm.invalid || creatingAccount">
+  {{ creatingAccount ? 'Opening...' : 'Open Account' }}
+</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

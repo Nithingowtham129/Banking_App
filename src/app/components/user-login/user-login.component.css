@@ -1,0 +1,115 @@
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-image: url("C:/Users/NITHIN GOWTHAM/Documents/java opp/Angular/online_banking_system/src/assets/images/bg4.jpg");
+    background-size: cover;
+}
+h2,h3 {
+    text-align: center;
+    color: #000000;
+}
+form {
+    border: 2px solid #ccc;
+    padding: 20px;
+    width: 30%;
+    height: 80%;
+    margin-top: 50px;
+    border-radius: 20px;
+    background-color: #ced4da;
+    opacity: 0.8;
+    box-shadow: 5px 5px 5px #3f3d3d;
+    backdrop-filter: blur(8px);
+}
+input {
+    display: flex;
+    width: 97%;
+    height: 40px;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: medium;
+    border: none;
+}
+input:focus {
+    background-color: #ffffffb9;
+    outline: none;
+}
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000000;
+}
+button {
+    margin-top: 10px;
+    width: 100%;
+    height: 40px;
+    background-color: #0400ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: rgb(174, 0, 255);
+    color: rgb(255, 255, 255);
+    transition: 0.3s;
+}
+p {
+    text-align: center;
+    color: #000000;
+}
+a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #007bff;
+}
+a:hover {
+    color: rgb(12, 16, 232);
+    transition: 0.3s;
+    text-decoration: underline;
+}
+
+.forgot{
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44, 62, 80, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.dialog-box {
+  background: #f5f3f3;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  padding: 2rem 2.5rem;
+  min-width: 440px;
+  max-width: 90vw;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

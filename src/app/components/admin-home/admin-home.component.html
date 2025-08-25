@@ -1,0 +1,271 @@
+<body>
+<!-- Stylish Top Navbar -->
+<nav class="navbar admin-navbar mb-4 shadow-sm">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <span class="navbar-brand fw-bold fs-4 mb-0 text-white letter-spacing-1">
+      <i class="fas fa-university me-2"></i>World Bank
+    </span>
+    <div class="d-flex align-items-center gap-3">
+      <span class="text-white small mb-0">
+        <i class="fas fa-user-circle me-1"></i> Admin
+      </span>
+      <button class="btn logout-btn d-flex align-items-center gap-2 px-3 py-1" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="small mb-0">Log Out</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Existing content -->
+<div class="container py-4">
+  <h2 class="mb-4 text-white">Admin Dashboard</h2>
+
+  <!-- Toggle Buttons -->
+  <div class="mb-4 text-left">
+    <button class="btn btn-toggle me-2" [class.active]="activeTab === 'accounts'" (click)="activeTab = 'accounts'">
+      All Accounts
+    </button>
+    <button class="btn btn-toggle me-2" [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'">
+      All Transactions
+    </button>
+    <button class="btn btn-toggle" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'">
+      All Users
+    </button>
+    <button class="btn btn-toggle ms-2" (click)="goToMessages()">
+      <i class="fas fa-envelope"></i> Messages
+    </button>
+  </div>
+
+  <!-- Accounts Section -->
+  <div *ngIf="activeTab === 'accounts'" class="card mb-5 shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">All Accounts</h5>
+    </div>
+    <div class="card-body p-0">
+      <!-- Search and Filters -->
+      <div class="row p-3">
+        <div class="col-md-4 mb-2">
+          <input type="search" class="form-control" placeholder="Search by Account/User" [(ngModel)]="accountSearch" (input)="filterAccounts()" />
+        </div>
+        <div class="col-md-4 mb-2">
+          <select class="form-select" [(ngModel)]="accountTypeFilter" (change)="filterAccounts()">
+            <option value="">All Types</option>
+            <option value="Savings">Savings</option>
+            <option value="Business">Business</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-2">
+          <select class="form-select" [(ngModel)]="accountStatusFilter" (change)="filterAccounts()">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="closed">Closed</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+      </div>
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Account ID</th>
+            <th>Account Number</th>
+            <th>Type</th>
+            <th>User</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of filteredAccounts | paginate: { id: 'accounts-pagination', itemsPerPage: accountsPageSize, currentPage: accountsCurrentPage }">
+            <td>{{ account.id }}</td>
+            <td>{{ account.accountNumber }}</td>
+            <td>{{ account.accountType }}</td>
+            <td>{{ account.user?.name }}</td>
+            <td>₹ {{ account.balance | number:'1.2-2' }}</td>
+            <td>
+              <span class="status-pill"
+              [ngClass]="{
+                'active-status': account.status === 'ACTIVE',
+                'inactive-status': account.status === 'INACTIVE',
+                'closed-status': account.status === 'CLOSED',
+                'blocked-status': account.status === 'BLOCKED'
+              }">
+              <i *ngIf="account.status === 'ACTIVE'" class="fas fa-check-circle me-1"></i>
+              <i *ngIf="account.status === 'INACTIVE'" class="fas fa-pause-circle me-1"></i>
+              <i *ngIf="account.status === 'CLOSED'" class="fas fa-times-circle me-1"></i>
+              <i *ngIf="account.status === 'BLOCKED'" class="fas fa-ban me-1"></i>
+              {{ account.status ? (account.status | titlecase) : 'Active' }}
+              </span>
+            </td>
+            <td>
+              <select class="form-select form-select-sm d-inline w-auto"
+                      [(ngModel)]="account.selectedStatus"
+                      [disabled]="account.status === 'CLOSED'">
+                <option *ngFor="let s of accountStatuses" [value]="s">{{ s | titlecase }}</option>
+              </select>
+              <button class="btn btn-sm btn-primary ms-2"
+                      (click)="updateAccountStatus(account.id, account.selectedStatus)"
+                      [disabled]="account.status === account.selectedStatus || account.status === 'CLOSED'">
+                Update
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Accounts Table Pagination -->
+      <pagination-controls class="d-flex justify-content-center my-2"
+        id="accounts-pagination"
+        (pageChange)="accountsCurrentPage = $event">
+      </pagination-controls>
+    </div>
+  </div>
+  
+
+  <!-- Transactions Section -->
+  <div *ngIf="activeTab === 'transactions'" class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">All Transactions</h5>
+    </div>
+    <div class="card-body p-0">
+      <!-- Search and Filters -->
+      <div class="row p-3">
+        <div class="col-md-4 mb-2">
+          <input type="search" class="form-control" placeholder="Search by Description/Account" [(ngModel)]="transactionSearch" (input)="filterTransactions()" />
+        </div>
+        <div class="col-md-4 mb-2">
+          <select class="form-select" [(ngModel)]="transactionTypeFilter" (change)="filterTransactions()">
+            <option value="">All Types</option>
+            <option value="credit">Credit</option>
+            <option value="debit">Debit</option>
+          </select>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input type="date" class="form-control" [(ngModel)]="transactionDateFilter" (change)="filterTransactions()" />
+        </div>
+      </div>
+      <table class="table table-striped mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Transaction ID</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Account</th>
+            <th>Type</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of filteredTransactions | paginate: { id: 'transactions-pagination', itemsPerPage: transactionsPageSize, currentPage: transactionsCurrentPage }">
+            <td>{{ tx.id }}</td>
+            <td>{{ tx.date | date: 'dd-MM-yyyy' }}</td>
+            <td>{{ tx.description }}</td>
+            <td>
+              {{ tx.account?.accountType }} ({{ tx.account?.accountNumber }})
+            </td>
+            <td>
+              <span [ngClass]="{
+                'text-success': tx.type === 'credit',
+                'text-danger': tx.type === 'debit'
+              }">
+                {{ tx.type | titlecase }}
+              </span>
+            </td>
+            <td>
+              <span [ngClass]="{
+                'text-success': tx.type === 'credit',
+                'text-danger': tx.type === 'debit'
+              }">
+                ₹ {{ tx.amount | number:'1.2-2' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Transactions Table Pagination -->
+      <pagination-controls class="d-flex justify-content-center my-2"
+        id="transactions-pagination"
+        (pageChange)="transactionsCurrentPage = $event">
+      </pagination-controls>
+    </div>
+  </div>
+
+  <!-- Users Section -->
+  <div *ngIf="activeTab === 'users'" class="card mb-5 shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">All Users</h5>
+    </div>
+    <div class="card-body p-0">
+      <!-- Search and Filters -->
+      <div class="row p-3">
+        <div class="col-md-6 mb-2">
+          <input type="search" class="form-control" placeholder="Search by Name/Email/Phone" [(ngModel)]="userSearch" (input)="filterUsers()" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <select class="form-select" [(ngModel)]="userStatusFilter" (change)="filterUsers()">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="deleted">Deleted</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+      </div>
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>User ID</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers | paginate: { id: 'users-pagination', itemsPerPage: usersPageSize, currentPage: usersCurrentPage }">
+            <td>{{ user.userId }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.name }}</td>
+            <td>
+              <span class="status-pill"
+                [ngClass]="{
+                  'active-status': user.status === 'ACTIVE',
+                  'inactive-status': user.status === 'INACTIVE',
+                  'deleted-status': user.status === 'DELETED',
+                  'blocked-status': user.status === 'BLOCKED'
+                }">
+                <i *ngIf="user.status === 'ACTIVE'" class="fas fa-check-circle me-1"></i>
+                <i *ngIf="user.status === 'INACTIVE'" class="fas fa-pause-circle me-1"></i>
+                <i *ngIf="user.status === 'DELETED'" class="fas fa-trash-alt me-1"></i>
+                <i *ngIf="user.status === 'BLOCKED'" class="fas fa-ban me-1"></i>
+                {{ user.status ? (user.status | titlecase) : 'Active' }}
+              </span>
+            </td>
+            <td>
+              <select class="form-select form-select-sm d-inline w-auto"
+                      [(ngModel)]="user.selectedStatus"
+                      [disabled]="user.status === 'DELETED'">
+                <option *ngFor="let s of userStatuses" [value]="s">{{ s | titlecase }}</option>
+              </select>
+              <button class="btn btn-sm btn-primary ms-2"
+                      (click)="updateUserStatus(user.userId, user.selectedStatus)"
+                      [disabled]="user.status === user.selectedStatus || user.status === 'DELETED'">
+                Update
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Users Table Pagination -->
+      <pagination-controls class="d-flex justify-content-center my-2"
+        id="users-pagination"
+        (pageChange)="usersCurrentPage = $event">
+      </pagination-controls>
+    </div>
+  </div>
+</div>
+
+</body>

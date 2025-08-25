@@ -1,0 +1,144 @@
+.navbar .btn {
+  font-size: 1rem;
+}
+
+.admin-navbar {
+  background: linear-gradient(90deg, #0d47a1 0%, #1976d2 60%, #42a5f5 100%);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+  border-bottom: 2px solid #1565c0;
+  min-height: 60px;
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+
+.logout-btn {
+  background: linear-gradient(90deg, #ff1744 0%, #ff5252 100%);
+  color: #fff !important;
+  border: none;
+  font-weight: 600;
+  border-radius: 2rem;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(255, 23, 68, 0.08);
+}
+
+.logout-btn:hover, .logout-btn:focus {
+  background: linear-gradient(90deg, #d50000 0%, #ff1744 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 23, 68, 0.18);
+}
+
+.navbar-brand i {
+  color: #ffd600;
+}
+
+body {
+  background-image: url("C:/Users/NITHIN GOWTHAM/Documents/java opp/Angular/online_banking_system/src/assets/images/bg9.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 1rem;
+  padding-bottom: 2rem;
+  height: 115vh;
+}
+
+/* Make cards and their content semi-transparent */
+.card {
+  background: rgba(255, 255, 255, 0.7) !important; /* white with 70% opacity */
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+}
+
+.card-header,
+.card-body {
+  background: transparent !important;
+}
+
+.table {
+  background: transparent !important;
+}
+
+.table-striped > tbody > tr {
+  background-color: rgba(255,255,255,0.5) !important;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.active-status {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+.inactive-status {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #FFC107;
+}
+.closed-status {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: #2196F3;
+}
+.blocked-status {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+}
+
+.card {
+    border-radius: 0.75rem;
+  }
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  .btn-danger[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+  }
+  .active-status {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+  }
+  .inactive-status {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #FFC107;
+  }
+  .deleted-status {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #F44336;
+  }
+  .blocked-status {
+    background-color: rgba(158, 158, 158, 0.1);
+    color: #9E9E9E;
+  }
+
+.btn-toggle {
+  background: linear-gradient(90deg, #e3e3e3 0%, #f7f7f7 100%);
+  color: #2d2d2d;
+  border: 2px solid #007bff;
+  font-weight: 500;
+  border-radius: 25px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 0.5rem 1.5rem;
+}
+
+.btn-toggle.active,
+.btn-toggle:focus,
+.btn-toggle:hover {
+  background: #007bff;
+  color: #fff;
+  border-color: #0056b3;
+  box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+  transition: 0.3s ease-in-out;
+}

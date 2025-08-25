@@ -1,0 +1,143 @@
+<div class="d-flex flex-column min-vh-100">
+  <!-- Top Navbar with Single Toggle Button -->
+  <nav class="navbar navbar-custom d-flex justify-content-between align-items-center px-3">
+    <div class="d-flex align-items-center gap-3">
+      <button
+        aria-label="Toggle Main Menu"
+        class="btn btn-link p-0 text-white"
+        (click)="toggleMenu()"
+      >
+        <i class="fas fa-bars fa-lg"></i>
+      </button>
+      <span class="fw-semibold fs-5 mb-0">World Bank</span>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+
+      <button class="btn btn-danger d-flex align-items-center gap-2 px-3 py-1" (click)="logout()" style="font-weight:600;">
+        <i class="fas fa-sign-out-alt fa-lg"></i>
+        <span class="text-white small mb-0">Log Out</span>
+      </button>
+
+      <button aria-label="User Profile" routerLink="/profile-card" class="d-flex align-items-center gap-2 px-2 py-1 rounded-3 border-0 shadow-sm bg-white profile-btn" >
+        <i class="fas fa-user-circle text-primary fa-lg"></i>
+        <span class="text-dark fw-medium">{{userName}}</span>
+      </button>
+      
+    </div>
+  </nav>
+  <div class="d-flex flex-grow-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar" [ngClass]="{ 'collapsed': !menuVisible }">
+      <div>
+        <div class="text-uppercase text-secondary small fw-semibold mb-3">
+          Main Menu
+        </div>
+        <nav class="nav flex-column mb-4">
+          <button class="nav-link text-start text-secondary sidebar-btn mb-2" (click)="gotoDashboard()">
+            <i class="fas fa-home me-2"></i>Dashboard
+          </button>
+          <button class="nav-link text-start text-secondary sidebar-btn mb-2" (click)="gotoAccounts()">
+            <i class="far fa-credit-card me-2"></i>Accounts
+          </button>
+          <button class="nav-link text-start active sidebar-btn mb-2" style="background:#0d6efd; color:#fff;">
+            <i class="fas fa-chart-bar me-2"></i>Transactions
+          </button>
+          <button class="nav-link text-start text-secondary sidebar-btn mb-2" (click)="gotoTransfer()">
+            <i class="fas fa-exchange-alt me-2"></i>Transfer
+          </button>
+        </nav>
+        <div class="text-uppercase text-secondary small fw-semibold mb-3">
+          Other Services
+        </div>
+        <nav class="nav flex-column">
+          <a class="nav-link text-secondary" routerLink="/savings"><i class="fas fa-piggy-bank me-2"></i>Savings</a>
+          <a class="nav-link text-secondary" routerLink="/notifications"><i class="fas fa-bell me-2"></i>Notifications</a>
+          <a class="nav-link text-secondary" routerLink="/settings"><i class="fas fa-cog me-2"></i>Settings</a>
+          <a class="nav-link text-secondary" routerLink="/help-support"><i class="fas fa-question-circle me-2"></i>Help & Support</a>
+        </nav>
+      </div>
+      <div class="bg-light rounded p-3 mt-4 small text-secondary">
+        <div class="fw-semibold mb-1">Need Help?</div>
+        <div class="mb-3">Contact our support team 24/7</div>
+        <button class="btn btn-primary btn-sm w-100" (click)="contactSupport()">Contact Support</button>
+      </div>
+    </aside>
+    <section class="flex-grow-1 p-4 container">
+      <h2 class="fs-6 fw-semibold mb-1">Transaction History</h2>
+      <p class="text-muted small mb-3">Review all your account activities</p>
+
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 mb-3">
+        <div class="flex-grow-1 position-relative">
+          <input
+            [(ngModel)]="searchTerm"
+            (input)="searchTransactions()"
+            type="search"
+            placeholder="Search transactions..."
+            class="form-control form-control-sm ps-5"
+          />
+        </div>
+      </div>
+
+      <!-- Filter Options -->
+      <div class="row mb-3">
+        <div class="col-md-3 mb-2">
+          <select class="form-select form-select-sm" [(ngModel)]="filterAccountType" (change)="filterTransactions()">
+            <option value="">All Account Types</option>
+            <option *ngFor="let accType of accountTypes">{{ accType }}</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-2">
+          <select class="form-select form-select-sm" [(ngModel)]="filterTransactionType" (change)="filterTransactions()">
+            <option value="">All Transaction Types</option>
+            <option value="credit">Credit</option>
+            <option value="debit">Debit</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-2">
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="filterFromDate" (change)="filterTransactions()" placeholder="From Date">
+        </div>
+        <div class="col-md-3 mb-2">
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="filterToDate" (change)="filterTransactions()" placeholder="To Date">
+        </div>
+      </div>
+
+      <!-- Transaction Table -->
+      <div class="table-responsive">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th class="w-15">Transaction_ID</th>
+              <th class="w-10">Date</th>
+              <th class="w-40">Description</th>
+              <th class="w-20">Account_Type</th>
+              <th class="w-15 text-end">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of filteredTransactions | paginate: { itemsPerPage: pageSize, currentPage: currentPage }">
+              <td>
+                <span class="Transaction_ID badge bg-secondary text-white">
+                  {{ transaction.id }}
+                </span>
+              </td>
+              <td>{{ transaction.date | date : "MMM d, yyyy" }}</td>
+              <td>
+                <div class="fw-semibold">{{ transaction.description }}</div>
+              </td>
+              <td>{{ transaction.account }}</td>
+              <td
+                class="text-end fw-semibold"
+                [ngClass]="transaction.amount > 0 ? 'text-success' : 'text-danger'"
+              >
+              ₹  {{ transaction.amount > 0 ? "+" : "" }} {{
+                  transaction.amount | number : "1.2-2"
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+      </div>
+    </section>
+  </div>
+</div>

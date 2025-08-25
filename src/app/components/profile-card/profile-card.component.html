@@ -1,0 +1,148 @@
+<body>
+  <div class="flip-card">
+    <div class="flip-card-inner">
+
+      <!-- Front Side -->
+      <div class="flip-card-front">
+        <div class="profile-card">
+          <!-- Your existing content here -->
+          <div class="card-header">
+            <div class="avatar">
+              <ng-container *ngIf="profileImage; else defaultIcon">
+                <img [src]="profileImage" alt="Profile Image" class="profile-img" />
+              </ng-container>
+              <ng-template #defaultIcon>
+                <i class="fas fa-user fa-3x" style="color: #dc3e75;"></i>
+              </ng-template>
+            </div>
+
+            <h2 class="user-name">{{name}}</h2>
+            <p class="user-title">Accout - Holder</p>
+          </div>
+
+          <div class="card-body">
+            <div class="detail-row">
+              <div class="detail-label">Account Number</div>
+              <div class="detail-value">
+                <div *ngFor="let acc of accounts">
+                    {{ acc.accountNumber }} - {{ acc.accountType }}
+                </div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Email</div>
+              <div class="detail-value">{{emailId}}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Phone</div>
+              <div class="detail-value">{{phone}}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Address</div>
+              <div class="detail-value">{{address}}</div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">Member Since</div>
+              <div class="detail-value">{{memberSince}}</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Back Side -->
+      <div class="flip-card-back">
+        <div class="profile-card">
+          <div class="card-header">
+            <h2 class="user-name">Settings</h2>
+            <p class="user-title">Quick Actions</p>
+          </div>
+          <div class="card-body">
+
+            <div class="detail-row">
+              <div class="detail-label">Date of birth</div>
+              <div class="detail-value">date of birth</div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">User Status</div>
+              <div class="detail-value">{{status}}</div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">Upload Picture</div>
+              <div class="detail-value">
+                <input id="image" type="file" (change)="onFileSelected($event)" accept="image/*" />
+              </div>
+            </div>
+
+            <div class="detail-row">
+              <div class="detail-label">Change Password</div>
+              <div class="detail-value"><button class="edit-btn" (click)="openDialog()">Change Password</button> </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Update Info</div>
+              <div class="detail-value"><a routerLink="/profile-card">Click Here</a></div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Logout</div>
+              <div class="detail-value"><a  routerLink="/user-login">Click Here</a></div>
+            </div>
+
+          </div>
+          <div class="card-footer">
+            <button class="edit-btn" (click)="goBack()">Go Back</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<!-- Forgot email dialog box -->
+<div>
+  <div *ngIf="showForgotEmailDialog" class="dialog-overlay">
+    <div class="dialog-box">
+      <h3 class="mb-3">Forgot Password</h3>
+      <label for="email" class="form-label">Enter your email:</label>
+      <input type="email" [(ngModel)]="forgotEmail" required class="form-control mb-3" [readonly]="otpSent"/>
+      <p *ngIf="otpMessage" style="color:rgb(0, 0, 0);">{{ otpMessage }}</p>
+      <div *ngIf="!otpSent" class="d-flex justify-content-end gap-2">
+        <button class="btn btn-primary btn-sm" (click)="sendOtp()" [disabled]="otpSending || !forgotEmail">
+        {{ otpSending ? 'Sending...' : 'Send OTP' }}</button>
+        <button class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>
+      </div>
+      <div *ngIf="otpSent">
+        <label for="otp" class="form-label mt-2">Enter OTP:</label>
+        <input type="text" [(ngModel)]="enteredOtp" required class="form-control mb-3" maxlength="6"/>
+        <p *ngIf="otpError" style="color:red;">{{ otpError }}</p>
+        <p *ngIf="otpVerified" style="color:rgb(0, 255, 30);"> OTP Verified successfully</p>
+        <div class="d-flex justify-content-end gap-2">
+          <button *ngIf="!otpVerified" class="btn btn-success btn-sm" (click)="verifyOtp()">Verify OTP</button>
+          <button *ngIf="!otpVerified" class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>
+        </div>
+      </div>
+
+      <div *ngIf="otpVerified">
+        <label for="newPassword" class="form-label mt-2">Enter New Password:</label>
+        <input type="password" [(ngModel)]="newPassword" required class="form-control mb-3" minlength="9" maxlength="15" #newPasswordRef="ngModel" pattern="^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\\\|,.<>/?]).{9,15}$" />
+        <div *ngIf="newPasswordRef.invalid && (newPasswordRef.dirty || newPasswordRef.touched)" class="text-danger">
+        <div *ngIf="newPasswordRef.errors?.['required']">Password is required.</div>
+        <div *ngIf="newPasswordRef.errors?.['minlength']">Password must be at least 9 characters.</div>
+        <div *ngIf="newPasswordRef.errors?.['maxlength']">Password cannot be more than 15 characters.</div>
+        <div *ngIf="newPasswordRef.errors?.['pattern']">
+          Password must have 1 uppercase letter, 1 number, and 1 special character.
+        </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-primary btn-sm" (click)="resetPassword()">Submit</button>
+          <button class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>

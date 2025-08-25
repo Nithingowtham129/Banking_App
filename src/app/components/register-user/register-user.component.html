@@ -1,0 +1,151 @@
+<html>
+<body>
+
+<div class="container mt-0" >
+
+  <form #form="ngForm" (ngSubmit)="onRegister(form)" class="form-container mx-auto" style="max-width: 500px;">
+
+    <h2 class="text-center text-black mb-4">Online Banking System</h2>
+    <h4 class="text-center text-black mb-4">User Registration</h4>
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" class="form-control" placeholder="Enter your name" name="name" minlength="3" pattern="^[A-Za-z ]+$" [(ngModel)]="Name" required #name="ngModel" />
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+      <div *ngIf="name.errors?.['required']">Name is required.</div>
+      <div *ngIf="name.errors?.['minlength']">Name must be at least 3 characters.</div>
+      <div *ngIf="name.errors?.['pattern']">Name should not contains numbers or special characters.</div>
+      </div>
+    </div>
+
+    <div class="mb-3 position-relative">
+      <label for="email" class="form-label">Email ID:</label>
+      <div class="input-group">
+        <input type="email"
+               class="form-control"
+               placeholder="Enter your email"
+               name="email"
+               [(ngModel)]="Email"
+               required
+               pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+               #email="ngModel"
+               [readonly]="otpVerified === true"/>
+        <span *ngIf="otpVerified === true" class="input-group-text bg-white border-0">
+          <i class="bi bi-check-circle-fill text-success"></i>
+        </span>
+      </div>
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+        <div *ngIf="email.errors?.['required']">Email is required.</div>
+        <div *ngIf="email.errors?.['email'] || email.errors?.['pattern']">
+          Please enter a valid email address.
+        </div>
+      </div>
+      <button type="button"
+        style="padding: 0.15rem 0.5rem; font-size: 0.85rem;"
+        class="btn btn-sm btn-primary mt-2"
+        (click)="sendOtp()"
+        [disabled]="!Email || email.invalid || otpSending || otpVerified === true">
+        {{ otpSending ? 'Sending OTP...' : 'Send OTP' }}
+      </button>
+      <div *ngIf="otpMessage" class="text-success mt-1">{{ otpMessage }}</div>
+
+      <!-- OTP Verification Field: Show only if not yet verified and not failed -->
+      <div *ngIf="otpMessage === 'OTP sent to your email!' && otpVerified === null" class="mt-3">
+        <label for="otp" class="form-label">Enter OTP:</label>
+        <input type="text" class="form-control" name="otp" [(ngModel)]="enteredOtp" maxlength="6" placeholder="Enter OTP" />
+        <button type="button"
+          style="padding: 0.15rem 0.5rem; font-size: 0.85rem;"
+          class="btn btn-sm btn-success mt-2"
+          (click)="verifyOtp()"
+          [disabled]="!enteredOtp || enteredOtp.length !== 6">
+          Verify OTP
+        </button>
+      </div>
+      <!-- OTP result messages -->
+      <div *ngIf="otpVerified === true" class="text-success mt-1">OTP verified successfully!</div>
+      <div *ngIf="otpVerified === false" class="text-danger mt-1">Invalid OTP. Please try again.</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="phone" class="form-label">Phone:</label>
+      <input type="tel" class="form-control" placeholder="Enter your phone number" name="phone" pattern="^[6-9][0-9]{9}$" [(ngModel)]="Phone" maxlength="10" required #phone="ngModel" />
+      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
+      <div *ngIf="phone.errors?.['required']">Phone number is required.</div>
+      <div *ngIf="phone.errors?.['pattern']">Phone number must be exactly 10 digits and starts with 6-9</div>
+  </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password:</label>
+      <input type="password" class="form-control" placeholder="Create your password" name="password" [(ngModel)]="Password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.&lt;&gt;\/?]).{9,15}$" minlength="9" maxlength="15" #password="ngModel" required />
+      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+      <div *ngIf="password.errors?.['required']">Password is required.</div>
+      <div *ngIf="password.errors?.['minlength']">Password must be at least 9 characters.</div>
+      <div *ngIf="password.errors?.['maxlength']">Password cannot be more than 15 characters.</div>
+      <div *ngIf="password.errors?.['pattern']">
+        Password must have 1 uppercase letter, 1 number, and 1 special character.
+      </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password:</label>
+      <input [type]="hideConfirmPassword ? 'password' : 'text'" class="form-control" placeholder="Confirm your password" name="confirmPassword" [(ngModel)]="confirmPassword" minlength="9" maxlength="15" #confirmPasswordField="ngModel" required/>
+      <div *ngIf="confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)" class="text-danger">
+        <div *ngIf="confirmPasswordField.errors?.['required']">Confirm password is required.</div>
+        <div *ngIf="confirmPasswordField.errors?.['minlength']">Password must be at least 9 characters.</div>
+        <div *ngIf="confirmPasswordField.errors?.['maxlength']">Password cannot be more than 15 characters.</div>
+      </div>
+
+      <!-- Password match validation -->
+      <div *ngIf="confirmPasswordField.dirty && confirmPassword !== Password" class="text-danger">
+        Password and Confirm Password do not match.
+      </div>
+
+      <div class="form-check mt-2">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="hideConfirmPassword" name="confirmPassword_hide" />
+        <label class="form-check-label">Hide</label>
+      </div>
+    </div>
+
+    <div class="mb-3">
+  <label for="address" class="form-label">Address:</label>
+  <textarea
+    class="form-control"
+    placeholder="Enter your full address"
+    name="address"
+    id="address"
+    rows="3"
+    [(ngModel)]="address"
+    maxlength="100"
+    required
+  ></textarea>
+</div>
+
+    <div class="form-check mb-3">
+      <input type="checkbox" class="form-check-input" name="agree" value="yes" required ngModel #agree="ngModel"/>
+      <label class="form-check-label">I agree to the terms and conditions</label>
+      <div *ngIf="agree.invalid && (agree.dirty || agree.touched || form.submitted)" class="text-danger">
+      You must agree to the terms and conditions.
+      </div>
+    </div>
+
+    <p>
+      By clicking Register, you agree to our
+      <a routerLink="/terms-and-conditions" >Terms of Service</a> and <a  routerLink="/terms-and-conditions">Privacy Policy</a>.
+    </p>
+
+    <button type="submit" class="btn btn-outline-secondary w-100"
+        [disabled]="registering || otpVerified !== true">
+        {{ registering ? 'Registering...' : 'Register' }}
+    </button>
+
+    <p class="mt-3 text-center">Already have an account?</p>
+    <div class="text-center">
+      <a routerLink="/user-login" class="btn btn-outline-secondary">Login Here</a>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

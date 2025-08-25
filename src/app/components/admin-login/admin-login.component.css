@@ -1,0 +1,9 @@
+.admin-login {
+    min-height: 100vh;
+    background: url("C:/Users/NITHIN GOWTHAM/Documents/java opp/Angular/online_banking_system/src/assets/images/bg1.jpg") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

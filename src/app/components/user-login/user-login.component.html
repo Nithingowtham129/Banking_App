@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)" >
+
+  <h2>Online Banking System</h2><br>
+  <h3>User Login</h3><br>
+  <label for="email">Email id: </label>
+  <input type="email" placeholder="Example@gmail.com" name="useremail" [(ngModel)]="email" required #emailField="ngModel"/>
+  <span *ngIf="emailField.invalid && emailField.touched" style="color:red;">Email is required</span><br>
+  <label for="password">Password: </label>
+  <input type="password" placeholder="Example@12345" name="password" [(ngModel)]="password" required #passwordField="ngModel"/>
+  <span *ngIf="passwordField.invalid && passwordField.touched" style="color:red;">Password is required</span><br>
+  <button type="submit" [disabled]="form.invalid || loggingIn">
+    {{ loggingIn ? 'Logging in...' : 'Login' }}
+  </button>
+  <button type="button" class="forgot" class="btn btn-outline-secondary" (click)="openDialog()">Forgot Password</button>
+  <br><br>
+  <p>Don't Have an Account ? <a routerLink="/register-user">Register Here</a></p>
+  <!-- <p>Forgot Password ? </p> -->
+</form>
+
+<!-- Forgot email dialog box -->
+<div>
+  <div *ngIf="showForgotEmailDialog" class="dialog-overlay">
+    <div class="dialog-box">
+      <h3 class="mb-3">Forgot Password</h3>
+      <label for="email" class="form-label">Enter your email:</label>
+      <input type="email" [(ngModel)]="forgotEmail" required class="form-control mb-3" [readonly]="otpSent"/>
+      <p *ngIf="otpMessage" style="color:rgb(0, 0, 0);">{{ otpMessage }}</p>
+      <div *ngIf="!otpSent" class="d-flex justify-content-end gap-2">
+        <button class="btn btn-primary btn-sm" (click)="sendOtp()" [disabled]="otpSending || !forgotEmail">
+        {{ otpSending ? 'Sending...' : 'Send OTP' }}</button>
+        <button class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>
+      </div>
+      <div *ngIf="otpSent">
+        <label for="otp" class="form-label mt-2">Enter OTP:</label>
+        <input type="text" [(ngModel)]="enteredOtp" required class="form-control mb-3" maxlength="6"/>
+        <p *ngIf="otpError" style="color:red;">{{ otpError }}</p>
+        <p *ngIf="otpVerified" style="color:rgb(0, 255, 30);"> OTP Verified successfully</p>
+        <div class="d-flex justify-content-end gap-2">
+          <button *ngIf="!otpVerified" class="btn btn-success btn-sm" (click)="verifyOtp()">Verify OTP</button>
+          <button *ngIf="!otpVerified" class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>
+        </div>
+      </div>
+
+      <div *ngIf="otpVerified">
+        <label for="newPassword" class="form-label mt-2">Enter New Password:</label>
+        <input type="password" [(ngModel)]="newPassword" required class="form-control mb-3" minlength="9" maxlength="15" #newPasswordRef="ngModel" pattern="^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\\\|,.<>/?]).{9,15}$" />
+        <div *ngIf="newPasswordRef.invalid && (newPasswordRef.dirty || newPasswordRef.touched)" class="text-danger">
+        <div *ngIf="newPasswordRef.errors?.['required']">Password is required.</div>
+        <div *ngIf="newPasswordRef.errors?.['minlength']">Password must be at least 9 characters.</div>
+        <div *ngIf="newPasswordRef.errors?.['maxlength']">Password cannot be more than 15 characters.</div>
+        <div *ngIf="newPasswordRef.errors?.['pattern']">
+          Password must have 1 uppercase letter, 1 number, and 1 special character.
+        </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-primary btn-sm" (click)="resetPassword()">Submit</button>
+          <button class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+    
+</body>
+</html>

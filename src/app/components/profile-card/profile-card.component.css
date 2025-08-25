@@ -1,0 +1,233 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #ff8383, #84bbf7);
+  padding: 20px;
+  animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Flip Card Container */
+.flip-card {
+  width: 400px;
+  height: 560px; /* Set fixed height to match profile-card */
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s ease;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+}
+
+.flip-card-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+  
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(to bottom right, #ff6b6b, #f7b7a3);
+
+}
+
+/* Profile Card Design */
+.profile-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #2980b9, #6dd5fa, #ffffff22);
+  color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-header {
+  padding: 24px;
+  text-align: center;
+  background: linear-gradient(to right, #34d3db, #074671);
+  color: white;
+}
+
+.user-name {
+  margin: 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.user-title {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+.card-body {
+  padding: 20px;
+  flex: 1;
+}
+
+.detail-row {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  flex: 1;
+  font-weight: 500;
+  color: #555;
+}
+
+.detail-value {
+  flex: 2;
+  color: #333;
+  word-break: break-word;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background-color: white;
+  border-top: 1px solid #f0f0f0;
+}
+
+.edit-btn,
+.contact-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #f0f8ff;
+  color: #2980b9;
+}
+
+.edit-btn:hover {
+  background-color: #e0effb;
+  transform: scale(1.05);
+}
+
+.contact-btn {
+  background-color: #f8f9fa;
+  color: #555;
+}
+
+.contact-btn:hover {
+  background-color: #e9ecef;
+  transform: scale(1.05);
+}
+
+.profile-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #00ff48;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.247);
+}
+
+#image{
+
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #2980b9;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Segoe UI', sans-serif;
+  margin-left: 60px;
+}
+
+.forgot{
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44, 62, 80, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.dialog-box {
+  background: #f5f3f3;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  padding: 2rem 2.5rem;
+  min-width: 440px;
+  max-width: 90vw;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  :host {
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  .flip-card {
+    width: 100%;
+    height: auto;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

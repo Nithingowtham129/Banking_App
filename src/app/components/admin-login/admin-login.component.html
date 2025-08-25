@@ -1,0 +1,22 @@
+<div class="admin-login d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+  <div class="card shadow-lg" style="width: 100%; max-width: 400px; background: rgba(235, 235, 235, 0.9);">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4 text-primary">Admin Login</h2>
+      <form (ngSubmit)="onSubmit()" #adminLoginForm="ngForm">
+        <div class="mb-3">
+          <label for="email" class="form-label">email</label>
+          <input type="text" id="email" name="email" [(ngModel)]="email" required class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" name="password" [(ngModel)]="password" required class="form-control">
+        </div>
+        <button type="submit"
+                [disabled]="!adminLoginForm.form.valid || loggingIn"
+                class="btn btn-success w-100">
+          {{ loggingIn ? 'Logging in...' : 'Login' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

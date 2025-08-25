@@ -1,0 +1,25 @@
+<body>
+<div class="contact-form">
+  <h2>Contact Support</h2>
+
+  <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)">
+    <label>
+      <input name="name" ngModel maxlength="15" placeholder="Enter Your Name" />
+    </label>
+
+    <label>
+      <input name="email" ngModel pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,20}$" required email placeholder="Enter Your Email"/>
+    </label>
+
+    <label>
+      <textarea name="description" ngModel required rows="5" placeholder="Enter Description...."></textarea>
+    </label>
+
+    <p *ngIf="message">{{ message }}</p><br>
+
+    <button type="submit" [disabled]="contactForm.invalid" [disabled]="loading">{{ loading ? 'Submitting...' : 'Submit' }}</button><br><br>
+    <button (click)="goBack()" class="back-button">Back</button>
+  </form>
+
+</div>
+</body>

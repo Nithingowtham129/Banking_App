@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InactivityService } from '../../Services/inactivity-service.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,8 @@ import { InactivityService } from '../../Services/inactivity-service.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+
+  private baseUrl: string = environment.apiUrl;
 
   userId: number | null = null;
   userName: string = ''; 
@@ -29,7 +32,7 @@ export class DashboardComponent implements OnInit {
     this.userId = userId ? +userId : null;
 
     if (this.userId !== null) {
-      this.http.get<{ userName: string, accounts: any[]}>(`http://localhost:8080/api/dashboard/${this.userId}`)
+      this.http.get<{ userName: string, accounts: any[]}>(`${this.baseUrl}/api/dashboard/${this.userId}`)
         .subscribe({
           next: (res) => {
             this.userName = res.userName;
@@ -60,7 +63,7 @@ export class DashboardComponent implements OnInit {
 
 
       // Fetch transactions
-      this.http.get<any[]>(`http://localhost:8080/api/dashboard/user/${this.userId}`)
+      this.http.get<any[]>(`${this.baseUrl}/api/dashboard/user/${this.userId}`)
         .subscribe({
           next: (res) => {
             this.transactions = res.map(tx => ({
@@ -106,7 +109,7 @@ export class DashboardComponent implements OnInit {
   }
 
   submitTransaction() {
-    this.http.post('http://localhost:8080/api/accounts/transactions', this.newTransaction, { responseType: 'text' })
+    this.http.post(`${this.baseUrl}/api/accounts/transactions`, this.newTransaction, { responseType: 'text' })
     .subscribe({
       next: (res) => {
         if (res === "Transaction successful.") {

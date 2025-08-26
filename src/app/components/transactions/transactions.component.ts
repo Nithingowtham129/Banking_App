@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Router } from '@angular/router';
 import { InactivityService } from '../../Services/inactivity-service.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-transaction-history',
@@ -14,6 +15,9 @@ import { InactivityService } from '../../Services/inactivity-service.service';
   styleUrls: ['./transactions.component.css'],
 })
 export class TransactionsComponent implements OnInit {
+
+  private baseUrl = environment.apiUrl;
+
   menuVisible = true;
   selectedAccount = 'All Accounts';
   userId: number | null = null;
@@ -37,7 +41,7 @@ export class TransactionsComponent implements OnInit {
   ngOnInit() {
     this.userId = parseInt(sessionStorage.getItem('userId') || '0', 10);
     if (this.userId) {
-      this.http.get<any[]>(`http://localhost:8080/api/dashboard/user/${this.userId}`)
+      this.http.get<any[]>(`${this.baseUrl}/api/dashboard/user/${this.userId}`)
         .subscribe({
           next: (res) => {
             this.transactions = res.map(tx => ({

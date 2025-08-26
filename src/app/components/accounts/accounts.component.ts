@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { InactivityService } from '../../Services/inactivity-service.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-accounts',
@@ -13,6 +14,8 @@ import { InactivityService } from '../../Services/inactivity-service.service';
   styleUrls: ['./accounts.component.css']
 })
 export class AccountsComponent implements OnInit { 
+
+  private baseUrl: string = environment.apiUrl;
 
   accounts: any[] = [];
   userName: string = 'John Doe'; // Default user name
@@ -32,7 +35,7 @@ export class AccountsComponent implements OnInit {
 
   ngOnInit() {
     if (this.userId !== null) {
-      this.http.get<{ userName: string, accounts: any[] }>(`http://localhost:8080/api/dashboard/${this.userId}`)
+      this.http.get<{ userName: string, accounts: any[] }>(`${this.baseUrl}/api/dashboard/${this.userId}`)
         .subscribe({
           next: (res) => {
             this.userName = res.userName;
@@ -52,7 +55,7 @@ export class AccountsComponent implements OnInit {
     }
 
 
-    this.http.get<number>(`http://localhost:8080/api/accounts/credit-monthly/${this.userId}`).subscribe({
+    this.http.get<number>(`${this.baseUrl}/api/accounts/credit-monthly/${this.userId}`).subscribe({
       next: (amount) => {
         this.creditedAmount = amount;
         // Format and set monthlyIncome in summary
@@ -64,7 +67,7 @@ export class AccountsComponent implements OnInit {
       }
     });
 
-    this.http.get<number>(`http://localhost:8080/api/accounts/debit-monthly/${this.userId}`).subscribe({
+    this.http.get<number>(`${this.baseUrl}/api/accounts/debit-monthly/${this.userId}`).subscribe({
       next: (amount) => {
         this.debitedAmount = amount;
         // Format and set monthlyIncome in summary
@@ -141,7 +144,7 @@ export class AccountsComponent implements OnInit {
 
   submitNewAccount() {
     this.creatingAccount = true; // Disable button
-    this.http.post('http://localhost:8080/api/accounts', this.newAccount)
+    this.http.post(`${this.baseUrl}/api/accounts`, this.newAccount)
       .subscribe({
         next: () => {
           this.showAccountModal = false;

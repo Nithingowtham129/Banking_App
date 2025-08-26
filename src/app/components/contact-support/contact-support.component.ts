@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-contact-support',
@@ -10,6 +11,7 @@ import { Location } from '@angular/common';
 })
 export class ContactSupportComponent {
 
+  private baseUrl = environment.apiUrl;
   message = '';
   loading = false;
 
@@ -18,7 +20,7 @@ export class ContactSupportComponent {
   onSubmit(form: any): void {
   if (form.valid) {
     this.loading = true;
-    this.http.post('http://localhost:8080/api/userRequest/contact-support', form.value, {
+    this.http.post(`${this.baseUrl}/api/userRequest/contact-support`, form.value, {
       responseType: 'text'
     }).subscribe({
       next: (res) => {

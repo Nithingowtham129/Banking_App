@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { InactivityService } from '../../Services/inactivity-service.service';
 import { AuthService } from '../../Services/authservice';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-profile-card',
@@ -13,6 +14,8 @@ import { AuthService } from '../../Services/authservice';
 export class ProfileCardComponent implements OnInit {
 
   constructor(private location: Location, private http: HttpClient, private InactivityService: InactivityService, private authService: AuthService) {}
+
+  private baseUrl = environment.apiUrl;
 
   profileImage: string = '';
   userId: number | null = null;
@@ -46,7 +49,7 @@ export class ProfileCardComponent implements OnInit {
   if (this.userId !== null) {
     const requestBody = { userId: this.userId };
 
-    this.http.post<any>('http://localhost:8080/api/dashboard/profile', requestBody, { responseType: 'json' as const }).subscribe({
+    this.http.post<any>(`${this.baseUrl}/api/dashboard/profile`, requestBody, { responseType: 'json' as const }).subscribe({
       next: (res) => {
         console.log('User profile:', res);
         this.name = res.name || 'John Doe';

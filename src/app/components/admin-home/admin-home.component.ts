@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-admin-home',
@@ -13,6 +14,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./admin-home.component.css']
 })
 export class AdminHomeComponent implements OnInit {
+
+  private baseUrl = environment.apiUrl;
   accounts: any[] = [];
   transactions: any[] = [];
   users: any[] = [];
@@ -53,7 +56,7 @@ export class AdminHomeComponent implements OnInit {
   }
 
   fetchAccounts() {
-    this.http.get<any[]>('http://localhost:8080/api/dashboard/admin/accounts')
+    this.http.get<any[]>(`${this.baseUrl}/api/dashboard/admin/accounts`)
       .subscribe({
         next: (data) => {
           this.accounts = data.map(acc => ({
@@ -71,7 +74,7 @@ export class AdminHomeComponent implements OnInit {
   }
 
   fetchTransactions() {
-    this.http.get<any[]>('http://localhost:8080/api/dashboard/admin/transactions')
+    this.http.get<any[]>(`${this.baseUrl}/api/dashboard/admin/transactions`)
       .subscribe({
         next: (data) => {
           this.transactions = data;
@@ -85,7 +88,7 @@ export class AdminHomeComponent implements OnInit {
   }
 
   fetchUsers() {
-    this.http.get<any[]>('http://localhost:8080/api/dashboard/admin/users')
+    this.http.get<any[]>(`${this.baseUrl}/api/dashboard/admin/users`)
       .subscribe({
         next: (data) => {
           this.users = data.map(user => ({
@@ -103,7 +106,7 @@ export class AdminHomeComponent implements OnInit {
 
   updateAccountStatus(accountId: number, newStatus: string) {
   if (!confirm(`Are you sure you want to set status to ${newStatus}?`)) return;
-  this.http.post('http://localhost:8080/api/dashboard/admin/update-account-status', { accountId: accountId, status: newStatus }, {responseType : 'text'})
+  this.http.post(`${this.baseUrl}/api/dashboard/admin/update-account-status`, { accountId: accountId, status: newStatus }, {responseType : 'text'})
     .subscribe({
       next: (res) => {
         if(res)
@@ -122,7 +125,7 @@ export class AdminHomeComponent implements OnInit {
 
   updateUserStatus(userId: number, newStatus: string) {
     if (!confirm(`Are you sure you want to set status to ${newStatus}?`)) return;
-    this.http.post('http://localhost:8080/api/dashboard/admin/update-user-status', { userId: userId, status: newStatus }, { responseType: 'text' })
+    this.http.post(`${this.baseUrl}/api/dashboard/admin/update-user-status`, { userId: userId, status: newStatus }, { responseType: 'text' })
       .subscribe({
         next: (res) => {
           if (res) {

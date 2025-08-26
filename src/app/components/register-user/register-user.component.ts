@@ -4,6 +4,7 @@ import { AuthService } from '../../Services/authservice';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-register-user',
@@ -12,6 +13,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './register-user.component.css'
 })
 export class RegisterUserComponent {
+
+  private baseUrl: string = environment.apiUrl;
 
   Name: string = '';
   Email: string = '';
@@ -83,7 +86,7 @@ export class RegisterUserComponent {
     this.otpMessage = '';
     this.otpVerified = null;
 
-    this.http.post('http://localhost:8080/api/auth/send-otp', {
+    this.http.post(`${this.baseUrl}/api/auth/send-otp`, {
       email: this.Email
     }, { responseType: 'text' }).subscribe({
       next: (res) => {
@@ -109,7 +112,7 @@ export class RegisterUserComponent {
 
   verifyOtp() {
     if (!this.Email || !this.enteredOtp) return;
-    this.http.post('http://localhost:8080/api/auth/verify-otp', {
+    this.http.post(`${this.baseUrl}/api/auth/verify-otp`, {
       email: this.Email,
       otp: this.enteredOtp
     }, { responseType: 'text' }).subscribe({

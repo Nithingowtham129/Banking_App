@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from '../../../environments/environment.prod';
+ 
 @Component({
   selector: 'app-admin-login',
   standalone: false,
@@ -9,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './admin-login.component.css'
 })
 export class AdminLoginComponent {
+
+  private baseUrl = environment.apiUrl;
 
   email: string = '';
   password: string = '';
@@ -23,7 +26,7 @@ export class AdminLoginComponent {
       password: this.password
     };
 
-    this.http.post<any>('http://localhost:8080/api/auth/admin/login', payload)
+    this.http.post<any>(`${this.baseUrl}/api/auth/admin/login`, payload)
       .subscribe({
         next: (resultData) => {
           if (resultData.message === "Login successful") {

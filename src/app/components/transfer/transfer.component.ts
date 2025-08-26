@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { InactivityService } from '../../Services/inactivity-service.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-transfer',
@@ -18,6 +19,8 @@ export class TransferComponent {
     this.menuVisible = !this.menuVisible;
   }
 
+  private baseUrl = environment.apiUrl;
+
   userId: number | null = null;
   currentStep: number = 1;
   fromAccount: string = '';
@@ -33,7 +36,7 @@ export class TransferComponent {
 
     if (this.userId !== null) {
       
-      this.http.get<any>(`http://localhost:8080/api/dashboard/${this.userId}`)
+      this.http.get<any>(`${this.baseUrl}/api/dashboard/${this.userId}`)
         .subscribe({
           next: (res) => {
             this.userName = res.userName;
@@ -70,7 +73,7 @@ export class TransferComponent {
       amount: this.amount
     };
 
-    this.http.post('http://localhost:8080/api/accounts/transfer', payload, { responseType: 'text' })
+    this.http.post(`${this.baseUrl}/api/accounts/transfer`, payload, { responseType: 'text' })
       .subscribe({
         next: (res) => {
           if (res === 'Transfer successful') {

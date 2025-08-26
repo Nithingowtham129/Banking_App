@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-message',
@@ -15,6 +16,8 @@ export class MessageComponent {
 
   constructor(private http: HttpClient) {}
 
+  private baseUrl = environment.apiUrl;
+
   sendMessage() {
     if (!this.subject.trim() || !this.message.trim()) return;
     this.sending = true;
@@ -23,7 +26,7 @@ export class MessageComponent {
       message: this.message
     };
     
-    this.http.post('http://localhost:8080/api/auth/admin/send-message', payload, { responseType: 'text' })
+    this.http.post(`${this.baseUrl}/api/auth/admin/send-message`, payload, { responseType: 'text' })
       .subscribe({
         next: (res: string) => {
           this.responseText = res;

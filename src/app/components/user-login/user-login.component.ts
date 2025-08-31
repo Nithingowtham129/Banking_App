@@ -18,6 +18,7 @@ export class UserLoginComponent implements OnInit {
   forgotEmail: string = '';
   enteredOtp: string = '';
   otpError: string = '';
+  errorMsg: string = '';
 
   ngOnInit() {
     sessionStorage.clear();
@@ -146,11 +147,18 @@ export class UserLoginComponent implements OnInit {
     this.otpVerified = false;
     this.otpMessage = '';
     this.otpError = '';
+    this.errorMsg = '';
     this.showForgotEmailDialog = false;
   }
 
   
   resetPassword() {
+
+    const errorMsg = this.validateNewPassword(this.newPassword);
+    if (errorMsg) {
+      this.errorMsg = errorMsg;
+      return;
+    }
 
     const payload = {
     email: this.forgotEmail,
@@ -176,6 +184,16 @@ export class UserLoginComponent implements OnInit {
         console.error(error);
       }
     });
+  }
+
+  validateNewPassword(password: string): string | null {
+  if (!password) return 'Password is required.';
+  if (password.length < 9) return 'Password must be at least 9 characters.';
+  if (password.length > 15) return 'Password cannot be more than 15 characters.';
+  if (!/[A-Z]/.test(password)) return 'Password must have at least 1 uppercase letter.';
+  if (!/\d/.test(password)) return 'Password must have at least 1 number.';
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) return 'Password must have at least 1 special character.';
+  return null;
   }
 
 }

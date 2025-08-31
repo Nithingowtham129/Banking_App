@@ -5,11 +5,14 @@ html {
 }
 body {
     font-family: Arial, sans-serif;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
     background-image: url("../../../assets/images/bg4.jpg");
     background-size: cover;
+    background-position: center;
+    margin: 0;
 }
 h2,h3 {
     text-align: center;
@@ -18,23 +21,26 @@ h2,h3 {
 form {
     border: 2px solid #ccc;
     padding: 20px;
-    width: 30%;
-    height: 80%;
-    margin-top: 50px;
+    width: 90%;
+    max-width: 500px;
+    margin: 40px auto;
     border-radius: 20px;
     background-color: #ced4da;
-    opacity: 0.8;
-    box-shadow: 5px 5px 5px #3f3d3d;
+    opacity: 0.92;
+    box-shadow: 5px 5px 15px #3f3d3d;
     backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
 }
 input {
-    display: flex;
-    width: 97%;
+    width: 100%;
     height: 40px;
     padding: 5px;
     border-radius: 5px;
-    font-size: medium;
+    font-size: 1rem;
     border: none;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 input:focus {
     background-color: #ffffffb9;
@@ -55,11 +61,21 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
 }
 button:hover {
     background-color: rgb(174, 0, 255);
     color: rgb(255, 255, 255);
     transition: 0.3s;
+}
+button.forgot {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.95rem;
+    margin-top: 0;
 }
 p {
     text-align: center;
@@ -75,15 +91,6 @@ a:hover {
     color: rgb(12, 16, 232);
     transition: 0.3s;
     text-decoration: underline;
-}
-
-.forgot{
-    background: none;
-    border: none;
-    color: #007bff;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 14px;
 }
 
 .dialog-overlay {
@@ -103,13 +110,49 @@ a:hover {
   background: #f5f3f3;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  padding: 2rem 2.5rem;
-  min-width: 440px;
-  max-width: 90vw;
+  padding: 2rem 1rem;
+  min-width: 400px;
+  margin-right: 12px;
+  max-width: 500px;
   animation: fadeIn 0.2s;
 }
 
 @keyframes fadeIn {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+    form {
+        width: 80%;
+        max-width: 98vw;
+        padding: 10px;
+        margin: 10px auto;
+        border-radius: 12px;
+    }
+    .dialog-box {
+        min-width: 98vw;
+        max-width: 98vw;
+        margin-left: 50px;
+        margin-right: 50px;
+        padding: 1rem 0.5rem;
+    }
+    h2, h3 {
+        font-size: 1.2rem;
+    }
+    button, input {
+        font-size: 0.95rem;
+        height: 36px;
+    }
+}
+
+@media (max-width: 400px) {
+    form {
+        padding: 5px;
+        border-radius: 8px;
+    }
+    .dialog-box {
+        padding: 0.5rem 0.2rem;
+        border-radius: 8px;
+    }
 }

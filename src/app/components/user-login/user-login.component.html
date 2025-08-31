@@ -52,15 +52,8 @@
 
       <div *ngIf="otpVerified">
         <label for="newPassword" class="form-label mt-2">Enter New Password:</label>
-        <input type="password" [(ngModel)]="newPassword" required class="form-control mb-3" minlength="9" maxlength="15" #newPasswordRef="ngModel" pattern="^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\\\|,.<>/?]).{9,15}$" />
-        <div *ngIf="newPasswordRef.invalid && (newPasswordRef.dirty || newPasswordRef.touched)" class="text-danger">
-        <div *ngIf="newPasswordRef.errors?.['required']">Password is required.</div>
-        <div *ngIf="newPasswordRef.errors?.['minlength']">Password must be at least 9 characters.</div>
-        <div *ngIf="newPasswordRef.errors?.['maxlength']">Password cannot be more than 15 characters.</div>
-        <div *ngIf="newPasswordRef.errors?.['pattern']">
-          Password must have 1 uppercase letter, 1 number, and 1 special character.
-        </div>
-        </div>
+        <input name="newPassword" type="password" [(ngModel)]="newPassword" required class="form-control mb-3" minlength="9" maxlength="15" #newPasswordRef="ngModel" pattern="^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\\\|,.<>/?]).{9,15}$" />
+        <p *ngIf="errorMsg" style="color:red;">{{ errorMsg }}</p>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-primary btn-sm" (click)="resetPassword()">Submit</button>
           <button class="btn btn-secondary btn-sm" (click)="closeDialog()">Close</button>

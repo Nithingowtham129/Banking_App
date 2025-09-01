@@ -241,3 +241,69 @@ body {
 .rounded-full {
   border-radius: 9999px;
 }
+
+.footer-custom {
+  width: 100%;
+  background: linear-gradient(90deg, #0f1a38 0%, #2563eb 100%);
+  border-top: 1px solid #e5e7eb;
+  color: #f3f4f6;
+  font-size: 1rem;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 -2px 12px rgba(15,26,56,0.08);
+  letter-spacing: 0.02em;
+}
+
+.footer-custom .container-fluid {
+  padding: 0.5rem 2rem;
+}
+
+.footer-custom a {
+  color: #f3f4f6;
+  transition: color 0.2s;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+}
+
+.footer-custom a:hover {
+  color: #ffd700;
+  border-bottom: 2px solid #ffd700;
+  text-decoration: none;
+}
+
+.footer-custom .footer-icon {
+  margin-right: 8px;
+  color: #ffd700;
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+.footer-custom .social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-custom .social-links a {
+  color: #ffd700;
+  font-size: 1.3em;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.footer-custom .social-links a:hover {
+  color: #fff;
+  transform: scale(1.15);
+}
+
+@media (max-width: 600px) {
+  .footer-custom .container-fluid {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 1rem 0.5rem;
+  }
+  .footer-custom .social-links {
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+}

@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
 
   private baseUrl: string = environment.apiUrl;
 
+  currentYear: number = new Date().getFullYear();
   userId: number | null = null;
   userName: string = ''; 
   accounts: any[] = [];

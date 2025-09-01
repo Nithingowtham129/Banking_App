@@ -156,4 +156,11 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  openDonateModal() {
+    const modal = document.getElementById('donateModal');
+    if (modal) {
+      (window as any).bootstrap.Modal.getOrCreateInstance(modal).show();
+    }
+  }
+
 }

@@ -31,6 +31,11 @@ export class TransferComponent {
   accounts: any[] = []; 
 
   ngOnInit() {
+
+    if (window.innerWidth <= 768) {
+      this.menuVisible = false;
+    }
+
     const userId = parseInt(sessionStorage.getItem('userId') || '0', 10);
     this.userId = userId ? +userId : null;
 
@@ -100,6 +105,10 @@ export class TransferComponent {
           this.ngOnInit();
         }
         });
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
   }
 
   get selectedFromAccount() {

@@ -23,8 +23,8 @@
   </nav>
   <div class="d-flex flex-grow-1 overflow-hidden">
     <!-- Sidebar -->
-   <aside class="sidebar" *ngIf="menuVisible">
-  <div>
+   <aside class="sidebar" [ngClass]="{'sidebar-mobile': isMobile(), 'sidebar-open': menuVisible}" *ngIf="menuVisible">
+  <div class="sidebar-menu-scroll">
     <div class="text-uppercase text-secondary small fw-semibold mb-3">Main Menu</div>
     <nav class="nav flex-column mb-4">
       <a class="nav-link active" routerLink="/dashboard"><i class="fas fa-home me-2"></i>Dashboard</a>
@@ -287,3 +287,6 @@
     </div>
   </div>
 </footer>
+
+<!-- Backdrop for mobile -->
+<div *ngIf="menuVisible && isMobile()" class="sidebar-backdrop" (click)="toggleMenu()"></div>

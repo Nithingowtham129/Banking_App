@@ -39,6 +39,11 @@ export class TransactionsComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router, private InactivityService: InactivityService) {}
 
   ngOnInit() {
+
+    if (window.innerWidth <= 768) {
+      this.menuVisible = false;
+    }
+
     this.userId = parseInt(sessionStorage.getItem('userId') || '0', 10);
     if (this.userId) {
       this.http.get<any[]>(`${this.baseUrl}/api/dashboard/user/${this.userId}`)
@@ -117,4 +122,9 @@ export class TransactionsComponent implements OnInit {
       return matchesAccount && matchesType && matchesFrom && matchesTo && matchesSearch;
     });
   }
+
+   isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
+  
 }

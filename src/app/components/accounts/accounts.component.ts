@@ -34,6 +34,11 @@ export class AccountsComponent implements OnInit {
   userId = parseInt(sessionStorage.getItem('userId') || '0', 10);
 
   ngOnInit() {
+
+    if (window.innerWidth <= 768) {
+      this.menuVisible = false;
+    }
+
     if (this.userId !== null) {
       this.http.get<{ userName: string, accounts: any[] }>(`${this.baseUrl}/api/dashboard/${this.userId}`)
         .subscribe({
@@ -161,6 +166,10 @@ export class AccountsComponent implements OnInit {
           alert(errorMessage);
         }
       });
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
   }
 
 }

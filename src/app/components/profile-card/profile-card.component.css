@@ -5,13 +5,91 @@
   min-height: 100vh;
   width: 100%;
   background: linear-gradient(135deg, #ff8383, #84bbf7);
-  padding: 20px;
-  animation: fadeIn 0.8s ease-in;
+  padding: 0;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #b1df0d, #0fbfde);
+}
+
+/* Desktop: Centered card with fixed width */
+.flip-card {
+  width: 400px;
+  height: 560px;
+  perspective: 1000px;
+  margin: 0;
+}
+
+/* Mobile: Full width card */
+@media (max-width: 600px) {
+  :host {
+    width: 100vw !important;
+    min-height: 100vh;
+    padding: 0 !important;
+  }
+  .flip-card,
+  .flip-card-inner,
+  .profile-card {
+    width: 100vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    font-size: 15px !important;
+  }
+}
+
+/* Ensure html and body take full width and height */
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  /* background-color: #b1df0d; */
+  /* background: linear-gradient(135deg, #ff8383, #84bbf7); */
+  background: linear-gradient(135deg, #b1df0d, #0fbfde);
+}
+
+/* Host should not add extra padding on mobile */
+@media (max-width: 600px) {
+  :host {
+    padding: 0 !important;
+    min-height: 100vh;
+    width: 100vw;
+  }
+  body {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Remove fixed width on .flip-card for small screens */
+@media (max-width: 600px) {
+  .flip-card {
+    width: 100vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    height: auto !important;
+  }
+  .flip-card-inner {
+    width: 100vw !important;
+    min-width: 0 !important;
+    height: auto !important;
+  }
+  .profile-card {
+    width: 100vw !important;
+    min-width: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    font-size: 15px !important;
+  }
 }
 
 /* Flip Card Container */
@@ -19,6 +97,7 @@
   width: 400px;
   height: 560px; /* Set fixed height to match profile-card */
   perspective: 1000px;
+  margin: 0; /* Remove any margin that could push it to the left */
 }
 
 .flip-card-inner {
@@ -68,6 +147,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.3s ease;
 }
 
 .card-header {
@@ -229,5 +309,42 @@
   .card-footer {
     flex-direction: column;
     gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .flip-card {
+    width: 100vw !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    height: auto !important;
+  }
+  .flip-card-inner {
+    width: 100vw !important;
+    min-width: 0 !important;
+    height: auto !important;
+  }
+  .profile-card {
+    width: 100vw !important;
+    min-width: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .flip-card,
+  .flip-card-inner,
+  .profile-card {
+    width: 100vw;
+    min-width: 0;
+    border-radius: 0;
+    font-size: 14px;
+  }
+  .dialog-box {
+    padding: 0.5rem 0.2rem;
+    border-radius: 6px;
+    max-width: 99vw;
   }
 }

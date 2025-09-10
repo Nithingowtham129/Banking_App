@@ -27,7 +27,7 @@
   </nav>
   <div class="d-flex flex-grow-1 overflow-hidden">
     <!-- Sidebar -->
-    <aside class="sidebar" [ngClass]="{ 'collapsed': !menuVisible }">
+    <aside class="sidebar" [ngClass]="{'sidebar-open': menuVisible}" *ngIf="menuVisible" >
       <div>
         <div class="text-uppercase text-secondary small fw-semibold mb-3">
           Main Menu
@@ -141,3 +141,6 @@
     </section>
   </div>
 </div>
+
+<!-- Backdrop for mobile -->
+<div *ngIf="menuVisible && isMobile()" class="sidebar-backdrop" (click)="toggleMenu()"></div>

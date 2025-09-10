@@ -32,6 +32,10 @@ export class DashboardComponent implements OnInit {
     const userId = parseInt(sessionStorage.getItem('userId') || '0', 10);
     this.userId = userId ? +userId : null;
 
+    if (window.innerWidth <= 768) {
+      this.menuVisible = false;
+    }
+
     if (this.userId !== null) {
       this.http.get<{ userName: string, accounts: any[]}>(`${this.baseUrl}/api/dashboard/${this.userId}`)
         .subscribe({
@@ -162,6 +166,10 @@ export class DashboardComponent implements OnInit {
     if (modal) {
       (window as any).bootstrap.Modal.getOrCreateInstance(modal).show();
     }
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
   }
 
 }
